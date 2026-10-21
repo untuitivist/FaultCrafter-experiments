@@ -1,6 +1,6 @@
 # FaultCrafter 对比实验
 
-独立私有实验仓库，用于运行 T1–T4 对比、源工况 CORAL、生成质量评价和结果导出。公开主仓库为 [FaultCrafter](https://github.com/untuitivist/FaultCrafter)，本文方法后续在主仓库发布。
+独立公开实验仓库，用于运行 T1–T4 对比、源工况 CORAL、生成质量评价和结果导出。方法主仓库为 [FaultCrafter](https://github.com/untuitivist/FaultCrafter)，本文方法后续在主仓库发布。
 
 ## 环境
 
@@ -12,7 +12,7 @@ cd FaultCrafter-experiments
 python -m pip install -r requirements.txt
 ```
 
-仓库为私有，克隆时使用有访问权限的 GitHub 账号认证。所有命令在仓库根目录执行；无需安装公开主仓库。`faultcrafter/` 仅包含固定诊断 CNN 和必要的数据适配器。
+仓库公开，可直接克隆。所有命令在仓库根目录执行；无需安装方法主仓库。`faultcrafter/` 仅包含固定诊断 CNN 和必要的数据适配器。
 
 ## 下载实验数据
 

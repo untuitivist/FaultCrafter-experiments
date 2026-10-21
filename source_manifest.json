@@ -18,8 +18,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5058,
-      "sha256": "d25eda79f3c1d65b8fb8a548cca9c416ce16fdac95c71ad58392260d52ae8166"
+      "bytes": 5017,
+      "sha256": "230b8f8bd57b7ae698bfc22f2a456f27c1266501ef6a132e654b68e6e5b8a928"
     },
     {
       "path": "faultcrafter/__init__.py",
@@ -388,5 +388,5 @@
     }
   ],
   "file_count": 77,
-  "total_bytes": 741286
+  "total_bytes": 741245
 }
