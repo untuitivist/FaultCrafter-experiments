@@ -1,0 +1,58 @@
+{
+  "protocol": "v19",
+  "updated": "2026-10-20",
+  "methods": {
+    "coral": {
+      "implementation": "ready",
+      "origin": "Source-domain CORAL, following DomainBed mean/covariance matching; same downstream CNN",
+      "local_reference": "research/benchmarks/coral.py",
+      "adaptation": "T1/T2 source conditions are domains. Equal-domain component-wise BCE plus mean/covariance alignment with weight 1; total batch 64; source-only validation; no target-domain training data."
+    },
+    "diffucd": {
+      "implementation": "ready",
+      "origin": "Journal-paper reconstruction from Zotero attachment WZKZMQKR",
+      "local_reference": "research/benchmarks/generative_models.py",
+      "adaptation": "1D CGE-UNet, encoder self-attention, decoder cross-attention, numerical condition encoder, 1200-step schedule, generated-cluster 70-percent filter. Widths and the filter implementation are recorded in method_sources.json."
+    },
+    "ccgan": {
+      "implementation": "ready",
+      "origin": "Author code, MIT",
+      "repository": "https://github.com/UBCDingXin/improved_CcGAN",
+      "revision": "106ec275901de001b44beb238992debd89e74002",
+      "local_reference": "third_party/comparison_upstream/ccgan",
+      "adaptation": "1D residual conditional-BN generator, projection discriminator, two-stage label embedding, multidimensional soft-vicinal hinge objective."
+    },
+    "iccdm": {
+      "implementation": "ready",
+      "origin": "Author code, MIT",
+      "repository": "https://github.com/UBCDingXin/CCDM",
+      "revision": "a63aa63010255b0b3107411c2d53e7869b8af9c3",
+      "local_reference": "third_party/comparison_upstream/iccdm/iCCDM",
+      "adaptation": "Upstream matrix-form EDM and Heun sampling with a 1D denoiser, trained conditional covariance, adaptive vicinal neighborhoods and multi-hot fault input."
+    },
+    "time_weaver": {
+      "implementation": "ready",
+      "origin": "Third-party ConTSG-Bench implementation, MIT",
+      "repository": "https://github.com/seqml/ConTSG-Bench",
+      "revision": "6c74409a6bc24825d8f08d878229485c68d41d67",
+      "local_reference": "third_party/comparison_upstream/contsg/contsg/models/timeweaver.py",
+      "adaptation": "Native patched TimeWeaverCore with numerical condition projection, source-only selection and inherited T2 adaptation."
+    },
+    "flowts": {
+      "implementation": "ready",
+      "origin": "Author code under FMTS, MIT",
+      "repository": "https://github.com/UNITES-Lab/FlowTS",
+      "revision": "1ec35fb1d3d89d91a1607a9f949a515347d54c8c",
+      "local_reference": "third_party/comparison_upstream/flowts/FMTS/Models/interpretable_diffusion",
+      "adaptation": "Native trend/Fourier transformer with continuous conditioning, linear flow objective, time scaling and shifted Euler sampling; equivalent SDPA replaces explicit attention products."
+    },
+    "mixstyle": {
+      "implementation": "ready",
+      "origin": "1D task adaptation of author algorithm, MIT",
+      "repository": "https://github.com/KaiyangZhou/mixstyle-release",
+      "revision": "16f7cf1fe2c7b1b3c660c72b32817ebb0545397a",
+      "reference_path": "reid/models/mixstyle.py",
+      "adaptation": "Temporal mean/std instead of spatial mean/std; cross-source-condition partners; unchanged diagnostic CNN parameters."
+    }
+  }
+}

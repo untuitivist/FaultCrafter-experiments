@@ -1,0 +1,41 @@
+{
+  "diffucd": {
+    "title": "Bearing fault diagnostic framework under unknown working conditions based on condition-guided diffusion model",
+    "doi": "10.1016/j.measurement.2024.115951",
+    "journal": "Measurement 242 (2025) 115951",
+    "zotero_item": "J888ISWK",
+    "zotero_attachment": "WZKZMQKR",
+    "architecture": "Three encoder self-attention blocks, three decoder cross-attention blocks, three-layer numerical condition encoder with timestep input, skip-connected UNet",
+    "implementation_choices": "1D channels 32/64/128/256, four attention heads, 128-dimensional condition embeddings; widths are port choices because the article does not specify them",
+    "diffusion_steps": 1200,
+    "beta_start": 0.001,
+    "beta_end": 0.05,
+    "filter_keep_fraction": 0.7,
+    "filter_port": "Per requested state and condition, retain the prescribed number nearest the generated cluster mean. The paper also describes high/low-dimensional KL probabilities without a fully specified embedding implementation; this port uses its stated nearest-cluster-center selection rule."
+  },
+  "ccgan": {
+    "repository": "https://github.com/UBCDingXin/improved_CcGAN",
+    "revision": "106ec275901de001b44beb238992debd89e74002",
+    "license": "MIT",
+    "port": "1D residual conditional-BN generator and spectral-normalized projection discriminator; signal-to-label and label-to-embedding pretraining; soft vicinal hinge GAN. Multiple physical parameters use Euclidean neighborhoods within the same device/channel/fault state."
+  },
+  "iccdm": {
+    "repository": "https://github.com/UBCDingXin/CCDM",
+    "revision": "a63aa63010255b0b3107411c2d53e7869b8af9c3",
+    "license": "MIT",
+    "port": "Execute the upstream matrix-form EDM and Heun sampler. A 32x32 carrier reshapes to 1024 samples before every 1D convolution; it introduces no 2D waveform neighborhoods. Learned covariance and conditional embeddings receive their own auxiliary training. Adaptive multidimensional vicinal neighborhoods retain device/channel/fault identity."
+  },
+  "time_weaver": {
+    "repository": "https://github.com/seqml/ConTSG-Bench",
+    "revision": "6c74409a6bc24825d8f08d878229485c68d41d67",
+    "license": "MIT",
+    "origin": "Third-party benchmark implementation",
+    "port": "Execute the native patched TimeWeaverCore, three 64-channel residual attention blocks, patch width four and 50-step quadratic beta schedule; continuous physical fields and multi-hot faults replace discrete-only attribute lookup."
+  },
+  "flowts": {
+    "repository": "https://github.com/UNITES-Lab/FlowTS",
+    "revision": "1ec35fb1d3d89d91a1607a9f949a515347d54c8c",
+    "license": "MIT",
+    "port": "Execute the native encoder/decoder, trend and Fourier-seasonal paths with 3 encoder and 6 decoder layers, width 64 and four heads. Add a continuous condition projection in latent space. Retain linear flow objective, time scale 1000, alpha-three shifted Euler grid. SDPA replaces mathematically identical explicit attention products; unused attention maps are omitted."
+  }
+}

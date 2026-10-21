@@ -1,0 +1,9 @@
+numpy>=1.24,<3
+torch>=2.4,<3
+scipy>=1.10,<2
+scikit-learn>=1.3,<2
+matplotlib>=3.7,<4
+einops>=0.7,<1
+tqdm>=4.65,<5
+PyWavelets>=1.4,<2
+umap-learn>=0.5,<1

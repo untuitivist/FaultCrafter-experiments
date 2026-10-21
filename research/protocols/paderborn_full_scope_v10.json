@@ -1,0 +1,354 @@
+{
+  "protocol_version": "v10",
+  "source": "https://mb.uni-paderborn.de/fileadmin-mb/kat/PDF/Veroeffentlichungen/20160703_PHME16_CM_bearing.pdf",
+  "selection_rule": "All healthy specimens and all specimens with damage restricted to the inner or outer ring; exclude combined inner-and-outer-ring damage from the current three-class task.",
+  "full_release": {
+    "specimens": 32,
+    "recordings": 2560,
+    "healthy": 6,
+    "artificial": 12,
+    "accelerated_lifetime": 14
+  },
+  "selected": {
+    "specimens": 29,
+    "recordings": 2320,
+    "recordings_per_condition": 580,
+    "groups": {
+      "normal": [
+        "K001",
+        "K002",
+        "K003",
+        "K004",
+        "K005",
+        "K006"
+      ],
+      "outer_race": [
+        "KA01",
+        "KA03",
+        "KA04",
+        "KA05",
+        "KA06",
+        "KA07",
+        "KA08",
+        "KA09",
+        "KA15",
+        "KA16",
+        "KA22",
+        "KA30"
+      ],
+      "inner_race": [
+        "KI01",
+        "KI03",
+        "KI04",
+        "KI05",
+        "KI07",
+        "KI08",
+        "KI14",
+        "KI16",
+        "KI17",
+        "KI18",
+        "KI21"
+      ]
+    }
+  },
+  "excluded_from_current_task": [
+    "KB23",
+    "KB24",
+    "KB27"
+  ],
+  "condition_fields": [
+    "shaft_frequency_hz",
+    "radial_force_n",
+    "load_torque_nm"
+  ],
+  "conditions": {
+    "N15_M07_F10": [
+      25.0,
+      1000.0,
+      0.7
+    ],
+    "N09_M07_F10": [
+      15.0,
+      1000.0,
+      0.7
+    ],
+    "N15_M01_F10": [
+      25.0,
+      1000.0,
+      0.1
+    ],
+    "N15_M07_F04": [
+      25.0,
+      400.0,
+      0.7
+    ]
+  },
+  "recordings_per_specimen_condition": 20,
+  "nominal_recording_duration_seconds": 4,
+  "selected_channel": "vibration_1",
+  "nominal_sample_rate_hz": 64000,
+  "t2_source_conditions": [
+    "N09_M07_F10",
+    "N15_M01_F10",
+    "N15_M07_F04"
+  ],
+  "t2_target_condition": "N15_M07_F10",
+  "specimens": [
+    {
+      "bearing": "K001",
+      "diagnosis": "normal",
+      "origin": "healthy",
+      "selected": true,
+      "official_paper_table": 7,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "K002",
+      "diagnosis": "normal",
+      "origin": "healthy",
+      "selected": true,
+      "official_paper_table": 7,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "K003",
+      "diagnosis": "normal",
+      "origin": "healthy",
+      "selected": true,
+      "official_paper_table": 7,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "K004",
+      "diagnosis": "normal",
+      "origin": "healthy",
+      "selected": true,
+      "official_paper_table": 7,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "K005",
+      "diagnosis": "normal",
+      "origin": "healthy",
+      "selected": true,
+      "official_paper_table": 7,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "K006",
+      "diagnosis": "normal",
+      "origin": "healthy",
+      "selected": true,
+      "official_paper_table": 7,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA01",
+      "diagnosis": "outer_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA03",
+      "diagnosis": "outer_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA04",
+      "diagnosis": "outer_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA05",
+      "diagnosis": "outer_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA06",
+      "diagnosis": "outer_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA07",
+      "diagnosis": "outer_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA08",
+      "diagnosis": "outer_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA09",
+      "diagnosis": "outer_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA15",
+      "diagnosis": "outer_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA16",
+      "diagnosis": "outer_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA22",
+      "diagnosis": "outer_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KA30",
+      "diagnosis": "outer_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KB23",
+      "diagnosis": "inner_outer_race",
+      "origin": "accelerated_lifetime",
+      "selected": false,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KB24",
+      "diagnosis": "inner_outer_race",
+      "origin": "accelerated_lifetime",
+      "selected": false,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KB27",
+      "diagnosis": "inner_outer_race",
+      "origin": "accelerated_lifetime",
+      "selected": false,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI01",
+      "diagnosis": "inner_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI03",
+      "diagnosis": "inner_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI04",
+      "diagnosis": "inner_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI05",
+      "diagnosis": "inner_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI07",
+      "diagnosis": "inner_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI08",
+      "diagnosis": "inner_race",
+      "origin": "artificial",
+      "selected": true,
+      "official_paper_table": 4,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI14",
+      "diagnosis": "inner_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI16",
+      "diagnosis": "inner_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI17",
+      "diagnosis": "inner_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI18",
+      "diagnosis": "inner_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    },
+    {
+      "bearing": "KI21",
+      "diagnosis": "inner_race",
+      "origin": "accelerated_lifetime",
+      "selected": true,
+      "official_paper_table": 5,
+      "expected_recordings": 80
+    }
+  ]
+}
