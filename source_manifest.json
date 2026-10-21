@@ -8,8 +8,8 @@
     },
     {
       "path": ".gitignore",
-      "bytes": 589,
-      "sha256": "5ca5402206c308100a6536362fa42e7ddd36489c01aa7780b3524af66bc484f6"
+      "bytes": 635,
+      "sha256": "e1d39bd29ae73ac8e2adb5647285fe1d8c6a3d6943db5997f9bccf83d64e0bc2"
     },
     {
       "path": "LICENSE",
@@ -18,8 +18,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 4710,
-      "sha256": "faf4eb02601a923be6aa7aa33faa32a75b6739d5c1fc8a56a41ca1308c00dc95"
+      "bytes": 5058,
+      "sha256": "d25eda79f3c1d65b8fb8a548cca9c416ce16fdac95c71ad58392260d52ae8166"
     },
     {
       "path": "faultcrafter/__init__.py",
@@ -72,9 +72,19 @@
       "sha256": "8ec03539d0919f95695dc7b98d314a4cafdb30884aa13cdeca8bf5cd445200b8"
     },
     {
+      "path": "research/benchmarks/ADAPTATION_RETENTION.md",
+      "bytes": 3743,
+      "sha256": "ebb71d09b7b88a41560a36773422c01b3ef2f14c9a48b4d76aca075fd2a59827"
+    },
+    {
       "path": "research/benchmarks/__init__.py",
       "bytes": 78,
       "sha256": "a089d79494cd13daedf0d8265644abeb6a9bff8a117b4e3e8d59fa7c0b9a5323"
+    },
+    {
+      "path": "research/benchmarks/adaptation_retention.py",
+      "bytes": 22212,
+      "sha256": "ca30ddea5b2ba52252cfba44cab512954f9742e34051e59d329750599da5e11b"
     },
     {
       "path": "research/benchmarks/analysis_suite.py",
@@ -298,8 +308,8 @@
     },
     {
       "path": "research/protocols/task_taxonomy_and_protocol_20261018_zh.md",
-      "bytes": 96479,
-      "sha256": "cc528311b9c24e8cfee03d40fd017ea6d2f14799e2bed9981df1c3ff3a45bef1"
+      "bytes": 97713,
+      "sha256": "37bbb17f4d7f8e260668ba5d91f27ac329eb5ba199c5c66d94ba7f2c3b286776"
     },
     {
       "path": "third_party/comparison_sources/ccgan/LICENSE",
@@ -377,6 +387,6 @@
       "sha256": "0e1633ea726945ef45bcb00b8d502736189001f9dd062729d158de40d8bc1572"
     }
   ],
-  "file_count": 75,
-  "total_bytes": 713703
+  "file_count": 77,
+  "total_bytes": 741286
 }

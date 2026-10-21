@@ -14,6 +14,7 @@
 !/research/benchmarks/*.json
 !/research/benchmarks/*.mjs
 !/research/benchmarks/requirements-delivery.txt
+!/research/benchmarks/ADAPTATION_RETENTION.md
 !/research/protocols/
 !/research/protocols/*.md
 !/research/protocols/*.json

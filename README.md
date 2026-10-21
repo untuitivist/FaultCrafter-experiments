@@ -58,6 +58,8 @@ python -m research.benchmarks.export --data-run ../faultcrafter-data --run outpu
 
 ## 对比方法与源码边界
 
+T2 另有[原设备生成效用评价入口](research/benchmarks/ADAPTATION_RETENTION.md)，在适配完成后检验原设备的 R+G 诊断表现；T1 为适配前参照，不另加适配前实验。该入口读取已完成的检查点，不重新训练生成器；本文 LoRA 模型尚未定型，其具体加载接口待模型确定后接入。
+
 | 方法 | 当前实现来源 |
 | --- | --- |
 | DiffUCD | 按期刊论文重实现，非作者官方代码 |
