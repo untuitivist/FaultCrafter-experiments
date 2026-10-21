@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 
-from .common import METHODS, identity
+from .common import METHODS, T1_DEVICES, identity
 from .comparison_design import execution_plan
 from .proposed_training import training_recipe
 
@@ -35,11 +35,12 @@ def build_plan(run, splits, scope="all"):
         if template["kind"] != "cnn" or template["method"] != "flowts" or template["split"] not in splits:
             continue
         parent = parents[template["parent"], "lora"]
+        primary_strategy = "shared" if template["device"] in T1_DEVICES else "lora"
         if template["track"] == "T3":
             for mode, quota in (("source", 252), ("multi", 63), ("multi", 252)):
-                add(template, parent=parent, strategy="lora", arm=f"{mode}_{quota}", generation_mode=mode, generation_quota=quota)
+                add(template, parent=parent, strategy=primary_strategy, arm=f"{mode}_{quota}", generation_mode=mode, generation_quota=quota)
         else:
-            add(template, parent=parent, strategy="shared" if template["track"] == "T1" else "lora", generation_quota=63)
+            add(template, parent=parent, strategy=primary_strategy, generation_quota=63)
             if template["track"] == "T2" and template.get("arm") != "generated_only":
                 for strategy in ("full", "scratch"):
                     add(template, parent=parents[template["parent"], strategy], strategy=strategy, generation_quota=63)
