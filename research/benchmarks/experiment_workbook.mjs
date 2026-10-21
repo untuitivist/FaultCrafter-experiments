@@ -20,7 +20,7 @@ const devices = {
 const methods = {
   real_only: 'Real-only', augmentation: '常规增强', mixstyle: 'MixStyle', coral: 'CORAL',
   superposition: '单故障波形叠加', diffucd: 'DiffUCD', ccgan: 'CcGAN',
-  iccdm: 'iCCDM', time_weaver: 'Time Weaver', flowts: '条件FlowTS',
+  iccdm: 'iCCDM', time_weaver: 'Time Weaver', flowts: '条件FlowTS', faultcrafter: '本文方法',
 };
 const channels = {
   motor: '电机', bearing_base: '轴承座', bearing_upper: '轴承平行上端',
@@ -50,7 +50,7 @@ const average = values => {
 const channelName = value => channels[value] ?? value;
 function compareResults(first, second) {
   const keys = job => [job.track, Object.keys(devices).indexOf(job.device), job.channel ?? '',
-    job.target, Object.keys(methods).indexOf(job.method), job.arm ?? '', job.split];
+    job.target, Object.keys(methods).indexOf(job.method), job.strategy ?? '', job.arm ?? '', job.split];
   const left = keys(first.job), right = keys(second.job);
   for (let index = 0; index < left.length; index++) {
     if (left[index] < right[index]) return -1;
@@ -87,7 +87,9 @@ const generatorSources = new Map();
 for (const result of generators) {
   const manifest = await readJson(path.join(run, 'generators', result.job.id, 'source_manifest.json'));
   generatorSources.set(result.job.id, Object.fromEntries(['train', 'validation'].map(role => [role,
-    manifest[role].map(({ samples, ...cell }) => ({ ...cell, sample_count: samples.length })),
+    manifest.units ? manifest.units[role].map(([device, channel, state, condition]) =>
+      ({ device, channel, state, condition, sample_count: null })) :
+      manifest[role].map(({ samples, ...cell }) => ({ ...cell, sample_count: samples.length })),
   ])));
 }
 const physical = job => {
@@ -111,15 +113,20 @@ function identity(result, generator = false) {
   const job = result.job;
   return {
     experiment: (generator ? generatorIds : diagnosticIds).get(job.id), seed: job.split,
-    task: job.track, device: devices[job.device], method: methods[job.method],
+    task: job.track, device: devices[job.device], method: methods[job.method], strategy: job.strategy ?? null,
     channel: channelName(job.channel), training_group: generator ? null : trainingGroup(job),
     parent_experiment: generatorIds.get(job.parent) ?? null,
   };
 }
+const classifierSources = new Map();
+for (const seed of unique(diagnostics.map(result => result.job.split))) {
+  classifierSources.set(seed, await readJson(path.join(prepared, 'cache', 'windows', String(seed), 'manifest.json')));
+}
 function sourceFor(job) {
-  const own = generators.find(result => result.job.device === job.device && result.job.target === job.target && result.job.split === job.split);
-  if (!own) throw new Error(`No source manifest for ${job.id}`);
-  return generatorSources.get(own.job.id);
+  const source = classifierSources.get(job.split);
+  return Object.fromEntries(['train', 'validation'].map(role => [role, source.cells.filter(cell =>
+    cell.role === role && cell.device === job.device && cell.condition !== job.target).map(cell =>
+    ({ ...cell, channel: job.channel, sample_count: Math.min(cell.count, ready.quotas[role]) }))]));
 }
 function sourceSummary(manifest) {
   const grouped = selector => unique(manifest.train.map(cell => cell.device)).map(device =>
@@ -130,8 +137,9 @@ function sourceSummary(manifest) {
     training_channels: grouped(cell => channelName(cell.channel)),
     training_conditions: grouped(cell => `(${coordinateText(cell.device, cell.condition)})`),
     training_states: grouped(cell => cell.state),
-    training_windows: manifest.train.reduce((total, cell) => total + cell.sample_count, 0),
-    validation_windows: manifest.validation.reduce((total, cell) => total + cell.sample_count, 0),
+    training_windows: manifest.train.some(cell => cell.sample_count == null) ? null : manifest.train.reduce((total, cell) => total + cell.sample_count, 0),
+    validation_windows: manifest.validation.some(cell => cell.sample_count == null) ? null : manifest.validation.reduce((total, cell) => total + cell.sample_count, 0),
+    training_units: manifest.train.length, validation_units: manifest.validation.length,
   };
 }
 function computation(result) {
@@ -163,6 +171,7 @@ const generatorSettings = generators.map(result => ({
 const generatorResults = generators.map(result => ({
   ...identity(result, true), ...computation(result), source_validation_loss: result.source_validation_loss,
   best_step: result.best_step, updates: result.updates_completed ?? result.history?.length,
+  training_points: result.training_points ?? null, balanced_rounds: result.balanced_rounds ?? null,
   epochs_completed: result.epochs_completed, stop_reason: result.stop_reason, auxiliary_seconds: result.auxiliary_seconds,
   total_training_seconds: result.training_seconds + result.auxiliary_seconds,
   auxiliary_phase_updates: Object.entries(result.auxiliary_training).flatMap(([name, phases]) =>
@@ -242,7 +251,7 @@ const qualityResults = [...quality.records].sort(compareResults).map((entry, ind
 const integer = '#,##0', decimal = '0.000', rate = '0.00%', scientific = '0.000E+00';
 const column = (key, title, width = 18, format = null) => ({ key, title, width, format });
 const commonColumns = [column('experiment', '实验编号', 12), column('seed', '种子', 9, integer),
-  column('task', '任务', 9), column('device', '设备', 25), column('method', '方法', 19)];
+  column('task', '任务', 9), column('device', '设备', 25), column('method', '方法', 19), column('strategy', '适配策略', 18)];
 const diagnosticColumns = [...commonColumns, column('channel', '通道', 21),
   column('training_group', '训练数据组', 29), column('parent_experiment', '生成器实验编号', 17)];
 const generatorColumns = [...commonColumns, column('parent_experiment', '继承底座实验编号', 19)];
@@ -293,6 +302,7 @@ const sheets = [
       column('sampling_nfe', '实际采样NFE', 19, integer), column('sampling_ms', '单条生成时间（ms）', 25, decimal),
       column('updates', '主模型实际更新次数', 25, integer), column('best_step', '最佳检查点步数', 22, integer),
       column('epochs_completed', '实际完成轮数', 20, integer), column('stop_reason', '停止原因', 25),
+      column('training_points', '实际训练点数', 22, integer), column('balanced_rounds', '完整采样轮数', 20, integer),
       column('auxiliary_phase_updates', '各辅助阶段更新次数', 37), column('completed', '完成时间（UTC）', 33, 'yyyy-mm-dd hh:mm:ss.000'),
       column('job_id', '运行ID', 28), column('checkpoint_sha256', '模型权重SHA256', 31),
       column('parent_sha256', '继承底座权重SHA256', 33)],
@@ -326,6 +336,7 @@ const sheets = [
       column('training_devices', '训练设备', 42), column('training_channels', '训练通道', 52),
       column('training_conditions', '训练工况坐标', 58), column('training_states', '训练故障状态', 52),
       column('training_windows', '训练样本量', 19, integer), column('validation_windows', '验证样本量', 19, integer),
+      column('training_units', '源训练采样单元数', 24, integer), column('validation_units', '源验证采样单元数', 24, integer),
       column('native_length', '信号长度（点）', 21, integer), column('batch_size', '生成器训练批量', 22, integer),
       column('optimizer', '优化器', 15), column('learning_rate', '主模型学习率', 20, scientific),
       column('weight_decay', '权重衰减', 16, scientific), column('max_epochs', '最大训练轮数', 20, integer),

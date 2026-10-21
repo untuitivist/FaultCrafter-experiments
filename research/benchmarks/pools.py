@@ -62,6 +62,10 @@ def update_budget(pool, job):
     additional = (252 if job["track"] == "T3" else 63) * states
     if job["track"] == "T4":
         additional = 63 * len(T4_STATES[job["device"]])
+    if job.get("generation_quota") is not None:
+        if job["method"] != "faultcrafter" or job["generation_quota"] not in (63, 252):
+            raise ValueError("Unregistered proposed-method generation quota")
+        additional = job["generation_quota"] * (len(T4_STATES[job["device"]]) if job["track"] == "T4" else states)
     count = classifier_window_count(len(pool["roles"]["train"]["x"]), additional, job)
     per_epoch = math.ceil(count / CNN_RECIPE["batch_size"])
     return per_epoch, CNN_RECIPE["max_epochs"] * per_epoch, additional

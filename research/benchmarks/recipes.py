@@ -120,7 +120,7 @@ def classifier_window_count(real_count, additional_count, job):
 
     if job.get("arm") == "generated_only":
         return additional_count
-    return real_count + (additional_count if job["method"] in (*METHODS, "augmentation", "superposition") else 0)
+    return real_count + (additional_count if job["method"] in (*METHODS, "faultcrafter", "augmentation", "superposition") else 0)
 
 
 class EarlyStopping:

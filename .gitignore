@@ -8,6 +8,7 @@
 !/faultcrafter/
 !/faultcrafter/**/
 !/faultcrafter/**/*.py
+!/faultcrafter/resources/*.json
 !/research/
 !/research/benchmarks/
 !/research/benchmarks/*.py
@@ -15,6 +16,7 @@
 !/research/benchmarks/*.mjs
 !/research/benchmarks/requirements-delivery.txt
 !/research/benchmarks/ADAPTATION_RETENTION.md
+!/research/benchmarks/PROPOSED_METHOD.md
 !/research/protocols/
 !/research/protocols/*.md
 !/research/protocols/*.json

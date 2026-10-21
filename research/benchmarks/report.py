@@ -61,7 +61,7 @@ def generate_report(root):
             cost = result.get("cost", {})
             records.append({
                 "id": job["id"], "task": job["track"], "device": job["device"], "channel": job["channel"],
-                "method": job["method"], "arm": job.get("arm"), "target": job["target"], "split": job["split"],
+                "method": job["method"], "strategy": job.get("strategy"), "arm": job.get("arm"), "target": job["target"], "split": job["split"],
                 "mode": result.get("mode", "formal"), "updates": result.get("updates_completed"),
                 "best_step": result["best_step"], "source_validation_acc": result["source_accuracy"],
                 "epochs_completed": result.get("epochs_completed"), "best_epoch": result.get("best_epoch"),
@@ -96,7 +96,7 @@ def generate_report(root):
         job = result["job"]
         generator_records.append({
             "id": job["id"], "task": job["track"], "device": job["device"], "target": job["target"],
-            "method": job["method"], "split": job["split"], "parent": job["parent"],
+            "method": job["method"], "strategy": job.get("strategy"), "split": job["split"], "parent": job["parent"],
             "mode": result["mode"], "updates_per_phase": result["updates_per_phase"],
             "auxiliary_phases": {name: {phase: history["updates_completed"] if isinstance(history, dict) else len(history) for phase, history in phases.items()}
                                   for name, phases in result["auxiliary_training"].items()},
@@ -136,9 +136,9 @@ def generate_report(root):
                "all_comparison_methods_ready": not blocked,
                "missing_selected_ids": sorted(expected - completed), "missing_generator_ids": missing_generators,
                "errors": errors, "records": records, "generator_records": generator_records}
-    summaries = repeat_summaries(records, ("task", "device", "channel", "method", "arm", "target"),
+    summaries = repeat_summaries(records, ("task", "device", "channel", "method", "strategy", "arm", "target"),
                                  ("target_acc", "target_macro_f1", "target_macro_auc", "seen_acc", "seen_macro_f1", "seen_macro_auc"))
-    generator_summaries = repeat_summaries(generator_records, ("task", "device", "method", "target"),
+    generator_summaries = repeat_summaries(generator_records, ("task", "device", "method", "strategy", "target"),
         ("parameters_total", "parameters_trainable", "forward_gflops", "sampler_gflops", "training_seconds",
          "auxiliary_seconds", "validation_seconds", "sampling_seconds_batch_one", "peak_cuda_bytes"))
     payload["five_run_summary"] = summaries

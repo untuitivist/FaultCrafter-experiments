@@ -1,6 +1,6 @@
 # FaultCrafter 对比实验
 
-独立公开实验仓库，用于运行 T1–T4 对比、源工况 CORAL、生成质量评价和结果导出。方法主仓库为 [FaultCrafter](https://github.com/untuitivist/FaultCrafter)，本文方法后续在主仓库发布。
+独立公开实验仓库，用于运行 T1–T4 对比、源工况 CORAL、生成质量评价和结果导出。方法主仓库为 [FaultCrafter](https://github.com/untuitivist/FaultCrafter)。第32版结构的重新训练入口见[本文方法实验说明](research/benchmarks/PROPOSED_METHOD.md)。
 
 ## 环境
 
@@ -12,7 +12,7 @@ cd FaultCrafter-experiments
 python -m pip install -r requirements.txt
 ```
 
-仓库公开，可直接克隆。所有命令在仓库根目录执行；无需安装方法主仓库。`faultcrafter/` 仅包含固定诊断 CNN 和必要的数据适配器。
+仓库公开，可直接克隆。所有命令在仓库根目录执行；无需另行安装方法主仓库。`faultcrafter/` 包含方法模型、训练目标、固定诊断 CNN 及必要数据适配器；比较实现保留在本仓库的 `research/` 与 `third_party/`。
 
 ## 下载实验数据
 
@@ -58,7 +58,7 @@ python -m research.benchmarks.export --data-run ../faultcrafter-data --run outpu
 
 ## 对比方法与源码边界
 
-T2 另有[原设备生成效用评价入口](research/benchmarks/ADAPTATION_RETENTION.md)，在适配完成后检验原设备的 R+G 诊断表现；T1 为适配前参照，不另加适配前实验。该入口读取已完成的检查点，不重新训练生成器；本文 LoRA 模型尚未定型，其具体加载接口待模型确定后接入。
+T2 另有[原设备生成效用评价入口](research/benchmarks/ADAPTATION_RETENTION.md)，在适配完成后检验原设备的 R+G 诊断表现；T1 为适配前参照，不另加适配前实验。本文方法的新入口使用 `--with-retention` 接通这项评价，读取已完成检查点，不重新训练生成器。
 
 | 方法 | 当前实现来源 |
 | --- | --- |

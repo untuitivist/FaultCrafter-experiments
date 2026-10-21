@@ -17,7 +17,7 @@ from faultcrafter.models import CNN1D
 
 from .classifier import classification_metrics, save_torch, state_hash
 from .common import SPLITS, T1_DEVICES, file_hash, identity, read_json, seed_for, timestamp, write_json
-from .data import CHANNELS
+from .data import CHANNELS, PARENT, STRIDE, WINDOW
 from .generative_models import build_model
 from .generators import ConditionSchema
 from .pools import source_pool
@@ -98,6 +98,8 @@ def synthetic_signals(data_run, job, folder, *, steps, device, factory=None):
     schema = ConditionSchema(read_json(data_run / "inventory.json")["records"])
     result = read_json(folder / "result.json")
     checkpoint = torch.load(folder / "best.pt", map_location="cpu", weights_only=False)
+    if checkpoint.get("verification") or checkpoint.get("deployment_only"):
+        raise ValueError("Retention requires formal held-out weights")
     if identity(checkpoint["schema"]) != identity(schema.receipt()):
         raise ValueError("Condition schema differs from the prepared data")
     if factory:
@@ -109,9 +111,30 @@ def synthetic_signals(data_run, job, folder, *, steps, device, factory=None):
     conditions = pool["roles"]["train"]["conditions"]
     generated, labels = [], []
     seed = seed_for(job, "adaptation_retention_generation")
-    with torch.inference_mode(), torch.random.fork_rng(devices=[torch.cuda.current_device()] if device == "cuda" else []):
+    with contextlib.ExitStack() as contexts, torch.inference_mode(), torch.random.fork_rng(devices=[torch.cuda.current_device()] if device == "cuda" else []):
+        if checkpoint.get("format") == "faultcrafter_benchmark32_v1":
+            from .proposed_training import method_numerics
+            contexts.enter_context(method_numerics())
         torch.manual_seed(seed)
         for state in pool["states"]:
+            if checkpoint.get("format") == "faultcrafter_benchmark32_v1":
+                for condition_index, condition in enumerate(conditions):
+                    count = 63 // len(conditions) + (condition_index < 63 % len(conditions))
+                    if count == 0:
+                        continue
+                    vector = schema.encode(job["device"], job["channel"], state,
+                                           schema.coordinates[job["device"], condition])
+                    batch = torch.as_tensor(vector[None], device=device)
+                    parent = model.sample(batch, steps=steps, length=PARENT).float().cpu().numpy()
+                    if parent.shape != (1, 1, PARENT) or not np.isfinite(parent).all():
+                        raise RuntimeError("Invalid original-device long-parent generation")
+                    starts = np.arange(0, PARENT - WINDOW + 1, STRIDE)[:count]
+                    if len(starts) != count:
+                        raise ValueError("Insufficient parent windows for retention")
+                    generated.append(np.stack([parent[0, :, start:start + WINDOW] for start in starts]))
+                vector = [part in pool["labels"][state] for part in pool["components"]]
+                labels.extend([vector] * 63)
+                continue
             vectors = np.stack([schema.encode(job["device"], job["channel"], state,
                                 schema.coordinates[job["device"], conditions[index % len(conditions)]])
                                 for index in range(63)])
@@ -281,7 +304,7 @@ def summarize(records, cases):
     return output
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description="Evaluate original-device R+G diagnosis after T2 adaptation; T1 remains the reference.")
     parser.add_argument("--data-run", type=Path, required=True)
     parser.add_argument("--cases", type=Path, required=True)
@@ -290,7 +313,7 @@ def main():
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
     parser.add_argument("--model-factory", help="module:function returning a loaded generator from (checkpoint, result, condition_dim)")
     parser.add_argument("--plan-only", action="store_true")
-    arguments = parser.parse_args()
+    arguments = parser.parse_args(argv)
     if arguments.output.resolve() == arguments.data_run.resolve() or arguments.steps < 2:
         raise ValueError("Use a separate output directory and at least two sampling steps")
     cases = load_cases(arguments.cases.resolve())
